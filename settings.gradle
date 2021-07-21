@@ -1,0 +1,2 @@
+rootProject.name = "AndroidGame2048"
+include ':app'
