@@ -35,10 +35,18 @@ public class OnSwipeListener implements View.OnTouchListener {
                         if (difX > 0){
                             onSwipeRight();
                         } else {
-                            onSwipeTop();
+                            onSwipeLeft();
                         }
                         result = true;
                     }
+                }
+                else if (Math.abs(difY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (difY > 0) {
+                        onSwipeBottom();
+                    } else {
+                        onSwipeTop();
+                    }
+                    result = true;
                 }
             } catch (Exception exception){
                 exception.printStackTrace();
@@ -56,10 +64,10 @@ public class OnSwipeListener implements View.OnTouchListener {
         public void onSwipeRight(){
 
         }
-        public void onSwipeBottom(){
+        public void onSwipeLeft(){
 
         }
-        public void onSwipeLeft(){
+        public void onSwipeBottom(){
 
         }
     }
