@@ -338,7 +338,7 @@ public class GameActivity extends AppCompatActivity {
                 //Our TextView display options
                 textView.setWidth(100);
                 textView.setHeight(210);
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(20);
 
                 if (map.get(list.get(position)) != 0) {
