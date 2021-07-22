@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
-    private HashMap<String, Integer> map = null;
-    private HashMap<String, Integer> preMap = null;
-    private GridView gridView = null;
-    private TextView textView;
-    private int score = 0;
+    HashMap<String, Integer> map = null;
+    HashMap<String, Integer> preMap = null;
+    GridView gridView = null;
+    TextView textView;
+    int score = 0;
 
     public GameActivity(HashMap map) {
         this.map = map;
@@ -125,9 +125,36 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
+    public void generateRandomNumber() {
+        Random random = new Random();
+        int i = random.nextInt(16) + 1;
+        Log.i("GEN", map.toString());
+        int flag = 0;
+        for (String key : map.keySet()) {
+            if (map.get(key) != 0) {
+                flag++;
+            }
+        }
+        if (flag != 16) {
+            while (map.get(i + "") != 0) {
+                i = random.nextInt(16) + 1;
+            }
+            int[] choice = {2, 4};
+            int r1 = random.nextInt(choice.length);
+            Log.i("GEN", choice[r1] + " " + i);
+            map.put(i + "", choice[r1]);
+            String[] num = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            Log.i("GEN", map.toString());
+            List<String> tileList = Arrays.asList(num);
+
+            gridChanger(tileList);
+        }
+    }
+
     public void gridChanger(List tileList) {
         final List<String> list = tileList;
         gridView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 1) {
+            @SuppressLint("SetTextI18n")
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
