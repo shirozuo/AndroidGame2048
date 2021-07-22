@@ -2,9 +2,16 @@ package com.mds.androidgame2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,6 +77,7 @@ public class GameActivity extends AppCompatActivity {
         final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
 
         //TODO grid here
+
     }
 
     public boolean isTop(int loc) {
@@ -115,5 +123,35 @@ public class GameActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void gridChanger(List tileList) {
+        final List<String> list = tileList;
+        gridView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 1) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view;
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(layoutParams);
+
+                //Our TextView display options
+                textView.setWidth(100);
+                textView.setHeight(210);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(20);
+                textView.setBackgroundColor(Color.parseColor("#c9c9c9")); //? https://encycolorpedia.ru/b2dfdb
+
+                if (map.get(list.get(position)) != 0) {
+                    Log.i("POS", position + "");
+                    Log.i("POS", list.get(position));
+                    textView.setText(map.get(list.get(position)) + "");
+                } else {
+                    textView.setText("");
+                }
+
+                textView.setId(position);
+                return textView;
+            }
+        });
     }
 }
