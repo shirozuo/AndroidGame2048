@@ -76,9 +76,76 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         Log.i("MAP", map.toString());
-        final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
 
+        final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
+        gridChanger(tileList);
         //TODO grid here
+        gridView.setOnTouchListener(new OnSwipeListener(GameActivity.this) {
+            public void onSwipeTop() {
+                preMap = new HashMap<>();
+                Log.i("MOV", "TOP");
+                Log.i("MAP", map.toString());
+                Log.i("BLN", isTop(1) + " " + isTop(2) + " " + isTop(3) + " " + isTop(4));
+                int k = 0;
+                while (!(isTop(1) && isTop(2) && isTop(3) && isTop(4))) {
+                    k = 1;
+                    for (int i = 16; i > 4; i--) {
+                        int j = i;
+                        if (j > 4 && map.get(j + "") == map.get((j - 4) + "")) {
+                            map.put((j - 4) + "", map.get(j + "") + map.get((j - 4) + ""));
+                            map.put(j + "", 0);
+                            String score = textView.getText().toString();
+                            int scorePoints = Integer.parseInt(score);
+                            scorePoints += map.get((j - 4) + "");
+                            textView.setText(scorePoints);
+                        } else if (j > 4 && map.get((j - 4) + "") == 0) {
+                            map.put((j - 4) + "", map.get(j + ""));
+                            map.put(j + "", 0);
+                        }
+                    }
+                }
+                Log.i("MAP", map.toString());
+
+                gridChanger(tileList);
+                generateRandomNumber();
+                checkSwipe();
+            }
+
+            public void onSwipeRight() {
+                preMap = new HashMap<>();
+                Log.i("MOV", "RIGHT");
+                Log.i("MAP", map.toString());
+                Log.i("BLN", isRight(4) + " " + isRight(8) + " " + isRight(12) + " " + isRight(16));
+                int k = 0;
+                int l = 0;
+                while (l == 0 || !(isRight(4) && isRight(8) && isRight(12) && isRight(16))) {
+                    l = 1;
+                    for (int i = 1; i < 17; i++) {
+                        int j = i;
+                        if (k == 0 && map.get(j + "") == map.get((j + 1) + "")) {
+                            map.put((j + 1) + "", map.get(j + "") + map.get((j + 1) + ""));
+                            map.put(j + "", 0);
+                            String score = textView.getText().toString();
+                            int scorePoints = Integer.parseInt(score);
+                            scorePoints += map.get(j + "") + map.get((j + 1) + "");
+                            textView.setText(scorePoints);
+                        } else if (k == 0 && map.get((j + 1) + "") == 0) {
+                            map.put((j + 1) + "", map.get(j + ""));
+                            map.put(j + "", 0);
+                        }
+                        if ((j / 4) != (j + 1) / 4) {
+                            k = 1;
+                        } else {
+                            k = 0;
+                        }
+                    }
+                }
+                Log.i("MAP", map.toString());
+                gridChanger(tileList);
+                generateRandomNumber();
+                checkSwipe();
+            }
+        });
 
     }
 
@@ -112,6 +179,21 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
+    public boolean isBottom(int loc) {
+        if (map.get(loc + "") == 0 && map.get((loc - 4) + "") == 0 && map.get("" + (loc - 8)) == 0 && map.get("" + (loc - 12)) == 0) {
+            return true;
+        } else if (map.get((loc - 4) + "") == 0 && map.get("" + (loc - 8)) == 0 && map.get("" + (loc - 12)) == 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc - 8)) == 0 && map.get("" + (loc - 12)) == 0 && map.get("" + (loc - 4)) != 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc - 12)) == 0 && map.get("" + (loc - 4)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc - 8)) != 0) {
+            return true;
+        } else if (map.get(loc + "") != 0 && map.get((loc - 4) + "") != 0 && map.get("" + (loc - 8)) != 0 && map.get("" + (loc - 12)) != 0) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean isLeft(int loc) {
         if (map.get(loc + "") == 0 && map.get((loc + 1) + "") == 0 && map.get("" + (loc + 2)) == 0 && map.get("" + (loc + 3)) == 0) {
             return true;
@@ -128,7 +210,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void checkSwipe() {
-        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.gameFieldLayout);
+        ConstraintLayout constraintLayout = findViewById(R.id.gameFieldLayout);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         linearLayout.setBackgroundColor(getResources().getColor(R.color.Aqua)); //? https://encycolorpedia.ru/#00FFFF
