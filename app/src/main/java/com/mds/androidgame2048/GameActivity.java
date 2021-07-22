@@ -20,10 +20,11 @@ public class GameActivity extends AppCompatActivity {
     private TextView textView;
     private int score = 0;
 
-    public GameActivity(HashMap map){
+    public GameActivity(HashMap map) {
         this.map = map;
     }
-    public GameActivity(){
+
+    public GameActivity() {
         this.map = new HashMap<>();
     }
 
@@ -32,36 +33,36 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         textView = findViewById(R.id.text_score);
-        gridView = findViewById(R.id.gamebackground);
+        gridView = findViewById(R.id.gameBackground);
         Random random1 = new Random();
-        int r1 = random1.nextInt(16-1+1)+1;
+        int r1 = random1.nextInt(16 - 1 + 1) + 1;
         Random random2 = new Random();
-        int r2 = random2.nextInt(16-1+1)+1;
-        if (r1 == r2 && r2!=16){
+        int r2 = random2.nextInt(16 - 1 + 1) + 1;
+        if (r1 == r2 && r2 != 16) {
             r2++;
         } else {
-            if (r1==r2){
+            if (r1 == r2) {
                 r2--;
             }
         }
         Log.i("R1+R2", r1 + " " + r2);
 
-        String[] numStrArray =new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"};
+        String[] numStrArray = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         Random random3 = new Random();
         Random random4 = new Random();
-        int[] choice = {2,4};
+        int[] choice = {2, 4};
         int r3 = random3.nextInt(choice.length);
         int r4 = random4.nextInt(choice.length);
 
         Log.i("CH1+CH2", choice[r3] + " " + choice[r4]);
-        for (int i=0; i<numStrArray.length; i++){
-            if (Integer.parseInt(numStrArray[i]) == r1){
+        for (int i = 0; i < numStrArray.length; i++) {
+            if (Integer.parseInt(numStrArray[i]) == r1) {
                 map.put(numStrArray[i], choice[r3]);
             }
-            if (Integer.parseInt(numStrArray[i]) == r2){
+            if (Integer.parseInt(numStrArray[i]) == r2) {
                 map.put(numStrArray[i], choice[r4]);
             }
-            if (Integer.parseInt(numStrArray[i]) != r1 && Integer.parseInt(numStrArray[i]) != r2){
+            if (Integer.parseInt(numStrArray[i]) != r1 && Integer.parseInt(numStrArray[i]) != r2) {
                 map.put(numStrArray[i], 0);
             }
         }
@@ -69,5 +70,50 @@ public class GameActivity extends AppCompatActivity {
         final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
 
         //TODO grid here
+    }
+
+    public boolean isTop(int loc) {
+        if (map.get(loc + "") == 0 && map.get((loc + 4) + "") == 0 && map.get("" + (loc + 8)) == 0 && map.get("" + (loc + 12)) == 0) {
+            return true;
+        } else if (map.get((loc + 4) + "") == 0 && map.get("" + (loc + 8)) == 0 && map.get("" + (loc + 12)) == 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc + 8)) == 0 && map.get("" + (loc + 12)) == 0 && map.get("" + (loc + 4)) != 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc + 12)) == 0 && map.get("" + (loc + 4)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc + 8)) != 0) {
+            return true;
+        } else if (map.get(loc + "") != 0 && map.get((loc + 4) + "") != 0 && map.get("" + (loc + 8)) != 0 && map.get("" + (loc + 12)) != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRight(int loc) {
+        if (map.get(loc + "") == 0 && map.get((loc - 1) + "") == 0 && map.get("" + (loc - 2)) == 0 && map.get("" + (loc - 3)) == 0) {
+            return true;
+        } else if (map.get((loc - 1) + "") == 0 && map.get("" + (loc - 2)) == 0 && map.get("" + (loc - 3)) == 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc - 2)) == 0 && map.get("" + (loc - 3)) == 0 && map.get("" + (loc - 1)) != 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc - 3)) == 0 && map.get("" + (loc - 1)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc - 2)) != 0) {
+            return true;
+        } else if (map.get(loc + "") != 0 && map.get((loc - 1) + "") != 0 && map.get("" + (loc - 2)) != 0 && map.get("" + (loc - 3)) != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isLeft(int loc) {
+        if (map.get(loc + "") == 0 && map.get((loc + 1) + "") == 0 && map.get("" + (loc + 2)) == 0 && map.get("" + (loc + 3)) == 0) {
+            return true;
+        } else if (map.get((loc + 1) + "") == 0 && map.get("" + (loc + 2)) == 0 && map.get("" + (loc + 3)) == 0 && map.get("" + loc) != 0) {
+            return true;
+        } else if (map.get("" + (loc + 2)) == 0 && map.get("" + (loc + 3)) == 0 && map.get("" + (loc + 1)) != 0 && map.get("" + (loc)) != 0) {
+            return true;
+        } else if (map.get("" + (loc + 3)) == 0 && map.get("" + (loc + 1)) != 0 && map.get("" + (loc)) != 0 && map.get("" + (loc + 2)) != 0) {
+            return true;
+        } else if (map.get(loc + "") != 0 && map.get((loc + 1) + "") != 0 && map.get("" + (loc + 2)) != 0 && map.get("" + (loc + 3)) != 0) {
+            return true;
+        }
+        return false;
     }
 }
