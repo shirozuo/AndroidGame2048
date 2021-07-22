@@ -339,7 +339,7 @@ public class GameActivity extends AppCompatActivity {
                 textView.setWidth(100);
                 textView.setHeight(210);
                 textView.setGravity(Gravity.CENTER);
-                textView.setTextSize(20);
+                textView.setTextSize(30);
 
                 if (map.get(list.get(position)) != 0) {
                     Log.i("POS", position + "");
