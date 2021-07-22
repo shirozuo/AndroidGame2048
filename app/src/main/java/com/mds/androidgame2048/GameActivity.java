@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
@@ -27,7 +28,6 @@ public class GameActivity extends AppCompatActivity {
     HashMap<String, Integer> preMap = null;
     GridView gridView = null;
     TextView textView = null;
-    int score = 0;
 
     public GameActivity(HashMap map) {
         this.map = map;
@@ -64,15 +64,15 @@ public class GameActivity extends AppCompatActivity {
         int r4 = random4.nextInt(choice.length);
 
         Log.i("CH1+CH2", choice[r3] + " " + choice[r4]);
-        for (int i = 0; i < numStrArray.length; i++) {
-            if (Integer.parseInt(numStrArray[i]) == r1) {
-                map.put(numStrArray[i], choice[r3]);
+        for (String s : numStrArray) {
+            if (Integer.parseInt(s) == r1) {
+                map.put(s, choice[r3]);
             }
-            if (Integer.parseInt(numStrArray[i]) == r2) {
-                map.put(numStrArray[i], choice[r4]);
+            if (Integer.parseInt(s) == r2) {
+                map.put(s, choice[r4]);
             }
-            if (Integer.parseInt(numStrArray[i]) != r1 && Integer.parseInt(numStrArray[i]) != r2) {
-                map.put(numStrArray[i], 0);
+            if (Integer.parseInt(s) != r1 && Integer.parseInt(s) != r2) {
+                map.put(s, 0);
             }
         }
         Log.i("MAP", map.toString());
@@ -80,6 +80,7 @@ public class GameActivity extends AppCompatActivity {
         final List<String> tileList = new ArrayList<>(Arrays.asList(numStrArray));
         gridChanger(tileList);
 
+        //to new class grid action?
         gridView.setOnTouchListener(new OnSwipeTouchListener(GameActivity.this) {
             @SuppressLint("SetTextI18n")
             public void onSwipeTop() {
@@ -87,21 +88,18 @@ public class GameActivity extends AppCompatActivity {
                 Log.i("MOV", "TOP");
                 Log.i("MAP", map.toString());
                 Log.i("BLN", isTop(1) + " " + isTop(2) + " " + isTop(3) + " " + isTop(4));
-                int k = 0;
                 while (!(isTop(1) && isTop(2) && isTop(3) && isTop(4))) {
-                    k = 1;
                     for (int i = 16; i > 4; i--) {
-                        int j = i;
-                        if (j > 4 && map.get(j + "") == map.get((j - 4) + "")) {
-                            map.put((j - 4) + "", map.get(j + "") + map.get((j - 4) + ""));
-                            map.put(j + "", 0);
+                        if (Objects.equals(map.get(i + ""), map.get((i - 4) + ""))) {
+                            map.put((i - 4) + "", map.get(i + "") + map.get((i - 4) + ""));
+                            map.put(i + "", 0);
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
-                            scorePoints += map.get((j - 4) + "");
+                            scorePoints += map.get((i - 4) + "");
                             textView.setText(scorePoints + "");
-                        } else if (j > 4 && map.get((j - 4) + "") == 0) {
-                            map.put((j - 4) + "", map.get(j + ""));
-                            map.put(j + "", 0);
+                        } else if (map.get((i - 4) + "") == 0) {
+                            map.put((i - 4) + "", map.get(i + ""));
+                            map.put(i + "", 0);
                         }
                     }
                 }
@@ -123,19 +121,18 @@ public class GameActivity extends AppCompatActivity {
                 while (l == 0 || !(isRight(4) && isRight(8) && isRight(12) && isRight(16))) {
                     l = 1;
                     for (int i = 1; i < 17; i++) {
-                        int j = i;
-                        if (k == 0 && map.get(j + "") == map.get((j + 1) + "")) {
-                            map.put((j + 1) + "", map.get(j + "") + map.get((j + 1) + ""));
-                            map.put(j + "", 0);
+                        if (k == 0 && Objects.equals(map.get(i + ""), map.get((i + 1) + ""))) {
+                            map.put((i + 1) + "", map.get(i + "") + map.get((i + 1) + ""));
+                            map.put(i + "", 0);
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
-                            scorePoints += map.get(j + "") + map.get((j + 1) + "");
+                            scorePoints += map.get(i + "") + map.get((i + 1) + "");
                             textView.setText(scorePoints + "");
-                        } else if (k == 0 && map.get((j + 1) + "") == 0) {
-                            map.put((j + 1) + "", map.get(j + ""));
-                            map.put(j + "", 0);
+                        } else if (k == 0 && map.get((i + 1) + "") == 0) {
+                            map.put((i + 1) + "", map.get(i + ""));
+                            map.put(i + "", 0);
                         }
-                        if ((j / 4) != (j + 1) / 4) {
+                        if ((i / 4) != (i + 1) / 4) {
                             k = 1;
                         } else {
                             k = 0;
@@ -158,18 +155,17 @@ public class GameActivity extends AppCompatActivity {
                 while (k == 0 || !(isBottom(13) && isBottom(14) && isBottom(15) && isBottom(16))) {
                     k = 1;
                     for (int i = 1; i < 13; i++) {
-                        int j = i;
 
-                        if (j < 13 && map.get(j + "") == map.get((j + 4) + "")) {
-                            map.put((j + 4) + "", map.get(j + "") + map.get((j + 4) + ""));
-                            map.put(j + "", 0);
+                        if (Objects.equals(map.get(i + ""), map.get((i + 4) + ""))) {
+                            map.put((i + 4) + "", map.get(i + "") + map.get((i + 4) + ""));
+                            map.put(i + "", 0);
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
-                            scorePoints += map.get((j + 4) + "");
+                            scorePoints += map.get((i + 4) + "");
                             textView.setText(scorePoints + "");
-                        } else if (j < 13 && map.get((j + 4) + "") == 0) {
-                            map.put((j + 4) + "", map.get(j + ""));
-                            map.put(j + "", 0);
+                        } else if (map.get((i + 4) + "") == 0) {
+                            map.put((i + 4) + "", map.get(i + ""));
+                            map.put(i + "", 0);
                         }
                     }
                 }
@@ -184,27 +180,26 @@ public class GameActivity extends AppCompatActivity {
                 Log.i("MOV", "LEFT");
                 Log.i("MAP", map.toString());
                 Log.i("BLN", isLeft(1) + " " + isLeft(5) + " " + isLeft(9) + " " + isLeft(13));
-                int k = 0;
+                int k;
                 int l = 0;
                 while (l == 0 || !(isLeft(1) && isLeft(5) && isLeft(9) && isLeft(13))) {
                     l = 1;
                     for (int i = 16; i > 1; i--) {
-                        int j = i;
-                        if (j == 13 || j == 9 || j == 5) {
+                        if (i == 13 || i == 9 || i == 5) {
                             k = 1;
                         } else {
                             k = 0;
                         }
-                        if (k == 0 && map.get(j + "") == map.get((j - 1) + "")) {
-                            map.put((j - 1) + "", map.get(j + "") + map.get((j - 1) + ""));
-                            map.put(j + "", 0);
+                        if (k == 0 && Objects.equals(map.get(i + ""), map.get((i - 1) + ""))) {
+                            map.put((i - 1) + "", map.get(i + "") + map.get((i - 1) + ""));
+                            map.put(i + "", 0);
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
-                            scorePoints += map.get((j - 1) + "");
+                            scorePoints += map.get((i - 1) + "");
                             textView.setText(scorePoints + "");
-                        } else if (k == 0 && map.get((j - 1) + "") == 0) {
-                            map.put((j - 1) + "", map.get(j + ""));
-                            map.put(j + "", 0);
+                        } else if (k == 0 && map.get((i - 1) + "") == 0) {
+                            map.put((i - 1) + "", map.get(i + ""));
+                            map.put(i + "", 0);
                         }
                     }
                 }
@@ -216,7 +211,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
     }
-
+    //all this boolean to new class Checker
     public boolean isTop(int loc) {
         if (map.get(loc + "") == 0 && map.get((loc + 4) + "") == 0 && map.get("" + (loc + 8)) == 0 && map.get("" + (loc + 12)) == 0) {
             return true;
@@ -226,10 +221,7 @@ public class GameActivity extends AppCompatActivity {
             return true;
         } else if (map.get("" + (loc + 12)) == 0 && map.get("" + (loc + 4)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc + 8)) != 0) {
             return true;
-        } else if (map.get(loc + "") != 0 && map.get((loc + 4) + "") != 0 && map.get("" + (loc + 8)) != 0 && map.get("" + (loc + 12)) != 0) {
-            return true;
-        }
-        return false;
+        } else return map.get(loc + "") != 0 && map.get((loc + 4) + "") != 0 && map.get("" + (loc + 8)) != 0 && map.get("" + (loc + 12)) != 0;
     }
 
     public boolean isRight(int loc) {
@@ -241,10 +233,7 @@ public class GameActivity extends AppCompatActivity {
             return true;
         } else if (map.get("" + (loc - 3)) == 0 && map.get("" + (loc - 1)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc - 2)) != 0) {
             return true;
-        } else if (map.get(loc + "") != 0 && map.get((loc - 1) + "") != 0 && map.get("" + (loc - 2)) != 0 && map.get("" + (loc - 3)) != 0) {
-            return true;
-        }
-        return false;
+        } else return map.get(loc + "") != 0 && map.get((loc - 1) + "") != 0 && map.get("" + (loc - 2)) != 0 && map.get("" + (loc - 3)) != 0;
     }
 
     public boolean isBottom(int loc) {
@@ -256,10 +245,7 @@ public class GameActivity extends AppCompatActivity {
             return true;
         } else if (map.get("" + (loc - 12)) == 0 && map.get("" + (loc - 4)) != 0 && map.get("" + loc) != 0 && map.get("" + (loc - 8)) != 0) {
             return true;
-        } else if (map.get(loc + "") != 0 && map.get((loc - 4) + "") != 0 && map.get("" + (loc - 8)) != 0 && map.get("" + (loc - 12)) != 0) {
-            return true;
-        }
-        return false;
+        } else return map.get(loc + "") != 0 && map.get((loc - 4) + "") != 0 && map.get("" + (loc - 8)) != 0 && map.get("" + (loc - 12)) != 0;
     }
 
     public boolean isLeft(int loc) {
@@ -271,12 +257,9 @@ public class GameActivity extends AppCompatActivity {
             return true;
         } else if (map.get("" + (loc + 3)) == 0 && map.get("" + (loc + 1)) != 0 && map.get("" + (loc)) != 0 && map.get("" + (loc + 2)) != 0) {
             return true;
-        } else if (map.get(loc + "") != 0 && map.get((loc + 1) + "") != 0 && map.get("" + (loc + 2)) != 0 && map.get("" + (loc + 3)) != 0) {
-            return true;
-        }
-        return false;
+        } else return map.get(loc + "") != 0 && map.get((loc + 1) + "") != 0 && map.get("" + (loc + 2)) != 0 && map.get("" + (loc + 3)) != 0;
     }
-
+    //to new class Checker
     @SuppressLint("SetTextI18n")
     public void checkSwipe() {
         ConstraintLayout constraintLayout = findViewById(R.id.gameFieldLayout);
@@ -301,7 +284,7 @@ public class GameActivity extends AppCompatActivity {
         Log.i("MAP", map.toString());
         Log.i("PRE", preMap.toString());
         for (String key : map.keySet()) {
-            if (map.get(key) != preMap.get(key)) {
+            if (!Objects.equals(map.get(key), preMap.get(key))) {
                 return;
             }
         }
