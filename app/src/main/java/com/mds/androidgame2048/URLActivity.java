@@ -26,7 +26,7 @@ public class URLActivity extends AppCompatActivity {
 
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -42,8 +42,6 @@ public class URLActivity extends AppCompatActivity {
             }
         });
         webView.loadUrl("https://github.com/shirozuo/AndroidGame2048");
-
-
 
 
     }

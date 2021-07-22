@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.onesignal.OSNotificationAction;
@@ -13,6 +14,8 @@ import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OneSignal;
 
 import org.json.JSONObject;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,23 +27,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_main);
 
         OneSignal.initWithContext(MainActivity.this.getBaseContext());
         OneSignal.setAppId(ONESIGNAL_APP_ID);
         OneSignal.setNotificationOpenedHandler(new NotificationOpenedHandler());
 
 
-//        progressBar = findViewById(R.id.progressBar);
-//        new Thread(() -> {
-//            while (progress < 100) {
-//                handler.post(() -> {
-//                    // OneSignal Initialization
-//                    progressBar.setProgress(progress);
-//                });
-//                progress++;
-//            }
-//        }).start();
+        progressBar = findViewById(R.id.progressBar);
+        new Thread(() -> {
+            while (progress < 100) {
+                handler.post(() -> {
+                    // OneSignal Initialization
+                    progressBar.setProgress(progress);
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    OneSignal.setNotificationOpenedHandler(new NotificationOpenedHandler());
+                    startGame();
+                });
+                progress++;
+            }
+        }).start();
+    }
+
+    public void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 
     private class NotificationOpenedHandler implements OneSignal.OSNotificationOpenedHandler {

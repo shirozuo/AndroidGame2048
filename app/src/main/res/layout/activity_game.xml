@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gameFieldLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/gameFieldLayout"
     android:background="#00796b">
 
 
@@ -22,21 +21,23 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:textAlignment="center"
-            app:cardBackgroundColor="@android:color/darker_gray" >
+            app:cardBackgroundColor="@android:color/darker_gray">
+
             <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:textSize="15sp"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
+                android:text="@string/score"
                 android:textAlignment="inherit"
-                android:text="@string/score"/>
+                android:textSize="15sp" />
+
             <TextView
-                android:id="@+id/text_score"
-                android:layout_gravity="end"
+                android:id="@+id/textScore"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:textAlignment="inherit"
-                android:text="@string/scorePoints"/>
+                android:layout_gravity="end"
+                android:text="@string/scorePoints"
+                android:textAlignment="inherit" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
@@ -48,9 +49,9 @@
         android:horizontalSpacing="5dp"
         android:numColumns="4"
         android:verticalSpacing="5dp"
-        app:layout_constraintStart_toEndOf="@id/linear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/linear"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear">
 

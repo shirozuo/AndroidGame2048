@@ -17,10 +17,10 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        int result = getIntent().getExtras().getInt("result");
+        int result = getIntent().getExtras().getInt("Result");
         TextView textView = findViewById(R.id.resultTextView);
         Button button = findViewById(R.id.resultButton);
-        if(result == 0){
+        if (result == 0) {
             textView.setText("YOU WON!");
             button.setText("Go to main");
         } else {
@@ -32,7 +32,7 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     public void retry(View view) {
-        Intent intent = new Intent(ResultActivity.this, GameActivity.class);
+        Intent intent = new Intent(ResultActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }

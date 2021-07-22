@@ -2,19 +2,20 @@ package com.mds.androidgame2048;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 
-public class OnSwipeListener implements View.OnTouchListener {
+public class OnSwipeTouchListener implements OnTouchListener {
     private final GestureDetector gestureDetector;
 
-    public OnSwipeListener(Context context) {
-        this.gestureDetector = new GestureDetector(context, new GestureListener());
+    public OnSwipeTouchListener(Context context) {
+        gestureDetector = new GestureDetector(context, new GestureListener());
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
@@ -25,22 +26,26 @@ public class OnSwipeListener implements View.OnTouchListener {
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
         @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             boolean result = false;
             try {
-                float difY = e2.getY() - e1.getY();
                 float difX = e2.getX() - e1.getX();
-                if (Math.abs(difX) > Math.abs(difY)){
-                    if (Math.abs(difX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD){
-                        if (difX > 0){
+                float difY = e2.getY() - e1.getY();
+                if (Math.abs(difX) > Math.abs(difY)) {
+                    if (Math.abs(difX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (difX > 0) {
                             onSwipeRight();
                         } else {
                             onSwipeLeft();
                         }
                         result = true;
                     }
-                }
-                else if (Math.abs(difY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                } else if (Math.abs(difY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (difY > 0) {
                         onSwipeBottom();
                     } else {
@@ -48,27 +53,26 @@ public class OnSwipeListener implements View.OnTouchListener {
                     }
                     result = true;
                 }
-            } catch (Exception exception){
+            } catch (Exception exception) {
                 exception.printStackTrace();
             }
             return result;
         }
+    }
 
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-        public void onSwipeTop(){
+    public void onSwipeTop() {
 
-        }
-        public void onSwipeRight(){
+    }
 
-        }
-        public void onSwipeLeft(){
+    public void onSwipeRight() {
 
-        }
-        public void onSwipeBottom(){
+    }
 
-        }
+    public void onSwipeLeft() {
+
+    }
+
+    public void onSwipeBottom() {
+
     }
 }

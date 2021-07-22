@@ -18,7 +18,7 @@
         android:id="@+id/resultButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="40sp"
+        android:layout_margin="40dp"
         android:background="@android:color/darker_gray"
         android:onClick="retry"
         android:text="@string/button_text" />

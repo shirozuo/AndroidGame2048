@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
-    HashMap<String, Integer> map = null;
+    HashMap<String, Integer> map;
     HashMap<String, Integer> preMap = null;
     GridView gridView = null;
-    TextView textView;
+    TextView textView = null;
     int score = 0;
 
     public GameActivity(HashMap map) {
@@ -41,7 +41,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        textView = findViewById(R.id.text_score);
+        textView = findViewById(R.id.textScore);
         gridView = findViewById(R.id.gameBackground);
         Random random1 = new Random();
         int r1 = random1.nextInt(16 - 1 + 1) + 1;
@@ -77,10 +77,10 @@ public class GameActivity extends AppCompatActivity {
         }
         Log.i("MAP", map.toString());
 
-        final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
+        final List<String> tileList = new ArrayList<>(Arrays.asList(numStrArray));
         gridChanger(tileList);
 
-        gridView.setOnTouchListener(new OnSwipeListener(GameActivity.this) {
+        gridView.setOnTouchListener(new OnSwipeTouchListener(GameActivity.this) {
             @SuppressLint("SetTextI18n")
             public void onSwipeTop() {
                 preMap = new HashMap<>();
@@ -342,8 +342,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void gridChanger(List tileList) {
+        Log.i("TST", "GridChanger started");
         final List<String> list = tileList;
-        gridView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 1) {
+        gridView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list) {
             @SuppressLint("SetTextI18n")
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -354,9 +355,8 @@ public class GameActivity extends AppCompatActivity {
                 //Our TextView display options
                 textView.setWidth(100);
                 textView.setHeight(210);
-                textView.setGravity(Gravity.CENTER);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL);
                 textView.setTextSize(20);
-                textView.setBackgroundColor(getResources().getColor(R.color.BurnishedSilver)); //? https://encycolorpedia.ru/c8c8c8
 
                 if (map.get(list.get(position)) != 0) {
                     Log.i("POS", position + "");
@@ -367,6 +367,9 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 textView.setId(position);
+                textView.setBackgroundColor(getResources().getColor(R.color.BurnishedSilver)); //? https://encycolorpedia.ru/c8c8c8
+
+                Log.i("TST", "GridChanger ends");
                 return textView;
             }
         });
