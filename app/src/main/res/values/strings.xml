@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidGame2048</string>
+    <string name="score">Score:</string>
+    <string name="scorePoints">0</string>
 </resources>
