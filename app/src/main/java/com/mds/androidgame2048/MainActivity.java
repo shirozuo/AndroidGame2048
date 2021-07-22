@@ -2,6 +2,7 @@ package com.mds.androidgame2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,42 +29,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // OneSignal Initialization
         OneSignal.initWithContext(MainActivity.this.getBaseContext());
         OneSignal.setAppId(ONESIGNAL_APP_ID);
-        OneSignal.setNotificationOpenedHandler(new NotificationOpenedHandler());
 
-
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.ProgressBar);
         new Thread(() -> {
             while (progress < 100) {
-                handler.post(() -> {
-                    // OneSignal Initialization
-                    progressBar.setProgress(progress);
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    OneSignal.setNotificationOpenedHandler(new NotificationOpenedHandler());
-                    startGame();
-                });
+                handler.post(() -> progressBar.setProgress(progress));
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 progress++;
             }
+
+            OneSignal.setNotificationOpenedHandler(new NotificationOpenedHandler());
+            startGame();
         }).start();
     }
 
     public void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private class NotificationOpenedHandler implements OneSignal.OSNotificationOpenedHandler {
 
         @Override
         public void notificationOpened(OSNotificationOpenedResult result) {
-            Intent intent = new Intent(getApplication(), URLActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(getApplication(), com.mds.androidgame2048.URLActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }
