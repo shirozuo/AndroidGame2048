@@ -1,9 +1,10 @@
 package com.mds.androidgame2048;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -125,6 +127,43 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
+    public void checkSwipe() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.gameFieldLayout);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setBackgroundColor(getResources().getColor(R.color.Aqua)); //? https://encycolorpedia.ru/#00FFFF
+        linearLayout.setGravity(Gravity.CENTER);
+        TextView result = new TextView(this);
+        for (String key : map.keySet()) {
+            if (map.get(key) == 2048) {
+                result.setText("YOU WON!");
+                result.setGravity(Gravity.CENTER);
+                linearLayout.addView(result);
+                constraintLayout.addView(linearLayout);
+                Intent intent = new Intent(GameActivity.this, ResultActivity.class);
+                intent.putExtra("result", 0);
+                startActivity(intent);
+                return;
+            }
+        }
+
+        Log.i("MAP", map.toString());
+        Log.i("PRE", preMap.toString());
+        for (String key : map.keySet()) {
+            if (map.get(key) != preMap.get(key)) {
+                return;
+            }
+        }
+
+        result.setText("YOU LOSE");
+        result.setGravity(Gravity.CENTER);
+        linearLayout.addView(result);
+        constraintLayout.addView(linearLayout);
+        Intent intent = new Intent(GameActivity.this, ResultActivity.class);
+        intent.putExtra("result", 1);
+        startActivity(intent);
+    }
+
     public void generateRandomNumber() {
         Random random = new Random();
         int i = random.nextInt(16) + 1;
@@ -166,7 +205,7 @@ public class GameActivity extends AppCompatActivity {
                 textView.setHeight(210);
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(20);
-                textView.setBackgroundColor(Color.parseColor("#c9c9c9")); //? https://encycolorpedia.ru/b2dfdb
+                textView.setBackgroundColor(getResources().getColor(R.color.BurnishedSilver)); //? https://encycolorpedia.ru/c8c8c8
 
                 if (map.get(list.get(position)) != 0) {
                     Log.i("POS", position + "");
