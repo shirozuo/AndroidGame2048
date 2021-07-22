@@ -2,4 +2,6 @@
     <string name="app_name">AndroidGame2048</string>
     <string name="score">Score:</string>
     <string name="scorePoints">0</string>
+    <string name="game_result">WIN/LOSE</string>
+    <string name="button_text">Button text</string>
 </resources>
