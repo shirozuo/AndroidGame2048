@@ -79,8 +79,9 @@ public class GameActivity extends AppCompatActivity {
 
         final List<String> tileList = new ArrayList<String>(Arrays.asList(numStrArray));
         gridChanger(tileList);
-        //TODO grid here
+
         gridView.setOnTouchListener(new OnSwipeListener(GameActivity.this) {
+            @SuppressLint("SetTextI18n")
             public void onSwipeTop() {
                 preMap = new HashMap<>();
                 Log.i("MOV", "TOP");
@@ -97,7 +98,7 @@ public class GameActivity extends AppCompatActivity {
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
                             scorePoints += map.get((j - 4) + "");
-                            textView.setText(scorePoints);
+                            textView.setText(scorePoints + "");
                         } else if (j > 4 && map.get((j - 4) + "") == 0) {
                             map.put((j - 4) + "", map.get(j + ""));
                             map.put(j + "", 0);
@@ -111,6 +112,7 @@ public class GameActivity extends AppCompatActivity {
                 checkSwipe();
             }
 
+            @SuppressLint("SetTextI18n")
             public void onSwipeRight() {
                 preMap = new HashMap<>();
                 Log.i("MOV", "RIGHT");
@@ -128,7 +130,7 @@ public class GameActivity extends AppCompatActivity {
                             String score = textView.getText().toString();
                             int scorePoints = Integer.parseInt(score);
                             scorePoints += map.get(j + "") + map.get((j + 1) + "");
-                            textView.setText(scorePoints);
+                            textView.setText(scorePoints + "");
                         } else if (k == 0 && map.get((j + 1) + "") == 0) {
                             map.put((j + 1) + "", map.get(j + ""));
                             map.put(j + "", 0);
@@ -137,6 +139,72 @@ public class GameActivity extends AppCompatActivity {
                             k = 1;
                         } else {
                             k = 0;
+                        }
+                    }
+                }
+                Log.i("MAP", map.toString());
+                gridChanger(tileList);
+                generateRandomNumber();
+                checkSwipe();
+            }
+
+            @SuppressLint("SetTextI18n")
+            public void onSwipeBottom() {
+                preMap = new HashMap<>(map);
+                Log.i("MOV", "BOTTOM");
+                Log.i("MAP", map.toString());
+                Log.i("BLN", isBottom(13) + " " + isBottom(14) + " " + isBottom(15) + " " + isBottom(16));
+                int k = 0;
+                while (k == 0 || !(isBottom(13) && isBottom(14) && isBottom(15) && isBottom(16))) {
+                    k = 1;
+                    for (int i = 1; i < 13; i++) {
+                        int j = i;
+
+                        if (j < 13 && map.get(j + "") == map.get((j + 4) + "")) {
+                            map.put((j + 4) + "", map.get(j + "") + map.get((j + 4) + ""));
+                            map.put(j + "", 0);
+                            String score = textView.getText().toString();
+                            int scorePoints = Integer.parseInt(score);
+                            scorePoints += map.get((j + 4) + "");
+                            textView.setText(scorePoints + "");
+                        } else if (j < 13 && map.get((j + 4) + "") == 0) {
+                            map.put((j + 4) + "", map.get(j + ""));
+                            map.put(j + "", 0);
+                        }
+                    }
+                }
+                gridChanger(tileList);
+                generateRandomNumber();
+                checkSwipe();
+            }
+
+            @SuppressLint("SetTextI18n")
+            public void onSwipeLeft() {
+                preMap = new HashMap<>(map);
+                Log.i("MOV", "LEFT");
+                Log.i("MAP", map.toString());
+                Log.i("BLN", isLeft(1) + " " + isLeft(5) + " " + isLeft(9) + " " + isLeft(13));
+                int k = 0;
+                int l = 0;
+                while (l == 0 || !(isLeft(1) && isLeft(5) && isLeft(9) && isLeft(13))) {
+                    l = 1;
+                    for (int i = 16; i > 1; i--) {
+                        int j = i;
+                        if (j == 13 || j == 9 || j == 5) {
+                            k = 1;
+                        } else {
+                            k = 0;
+                        }
+                        if (k == 0 && map.get(j + "") == map.get((j - 1) + "")) {
+                            map.put((j - 1) + "", map.get(j + "") + map.get((j - 1) + ""));
+                            map.put(j + "", 0);
+                            String score = textView.getText().toString();
+                            int scorePoints = Integer.parseInt(score);
+                            scorePoints += map.get((j - 1) + "");
+                            textView.setText(scorePoints + "");
+                        } else if (k == 0 && map.get((j - 1) + "") == 0) {
+                            map.put((j - 1) + "", map.get(j + ""));
+                            map.put(j + "", 0);
                         }
                     }
                 }
@@ -209,6 +277,7 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
+    @SuppressLint("SetTextI18n")
     public void checkSwipe() {
         ConstraintLayout constraintLayout = findViewById(R.id.gameFieldLayout);
         LinearLayout linearLayout = new LinearLayout(this);
