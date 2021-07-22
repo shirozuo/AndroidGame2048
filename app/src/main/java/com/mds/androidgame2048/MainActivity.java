@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // OneSignal Initialization
         OneSignal.initWithContext(MainActivity.this.getBaseContext());
         OneSignal.setAppId(ONESIGNAL_APP_ID);
+        Log.i("TST", "OneSignal init");
 
         progressBar = findViewById(R.id.ProgressBar);
         new Thread(() -> {
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP |
                     Intent.FLAG_ACTIVITY_NEW_TASK);
+            Log.i("ACT", "Move to WebActivity");
             startActivity(intent);
         }
     }
